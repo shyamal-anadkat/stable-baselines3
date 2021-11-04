@@ -366,6 +366,7 @@ class RolloutBuffer(BaseBuffer):
         :param dones: if the last step was a terminal step (one bool for each env).
 
         """
+        self.logger.record("shyamal - computing nstep returns & advantage")
         # Convert to numpy
         last_values = last_values.clone().cpu().numpy().flatten()
 
@@ -377,8 +378,8 @@ class RolloutBuffer(BaseBuffer):
             else:
                 next_non_terminal = 1.0 - self.episode_starts[step + 1]
                 next_values = self.values[step + 1]
-            delta = self.rewards[step] + self.gamma * next_values * next_non_terminal - self.values[step]
-            self.advantages[step] = delta
+            R = self.rewards[step] + self.gamma * next_values * next_non_terminal
+            self.advantages[step] = R - self.values[step]
         # TD(lambda) estimator, see Github PR #375 or "Telescoping in TD(lambda)"
         # in David Silver Lecture 4: https://www.youtube.com/watch?v=PnHCvfgC_ZA
         self.returns = self.advantages + self.values
