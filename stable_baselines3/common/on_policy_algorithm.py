@@ -225,7 +225,6 @@ class OnPolicyAlgorithm(BaseAlgorithm):
         reset_num_timesteps: bool = True,
     ) -> "OnPolicyAlgorithm":
         iteration = 0
-        self.logger.log("shyamal hw 1.3 AIPI530 - computing nstep returns & advantage")
         total_timesteps, callback = self._setup_learn(
             total_timesteps, eval_env, callback, eval_freq, n_eval_episodes, eval_log_path, reset_num_timesteps, tb_log_name
         )
@@ -255,7 +254,7 @@ class OnPolicyAlgorithm(BaseAlgorithm):
                 self.logger.dump(step=self.num_timesteps)
 
             self.train()
-
+        self.logger.log("shyamal hw 1.3 AIPI530 - computed nstep returns & advantage")
         callback.on_training_end()
 
         return self
