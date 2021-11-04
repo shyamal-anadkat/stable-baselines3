@@ -199,7 +199,6 @@ class OnPolicyAlgorithm(BaseAlgorithm):
             obs_tensor = obs_as_tensor(new_obs, self.device)
             _, values, _ = self.policy.forward(obs_tensor)
 
-        self.logger.log("shyamal hw 1.3 AIPI530 - computing nstep returns & advantage")
         rollout_buffer.compute_returns_and_advantage(last_values=values, dones=dones)
 
         callback.on_rollout_end()
@@ -226,7 +225,7 @@ class OnPolicyAlgorithm(BaseAlgorithm):
         reset_num_timesteps: bool = True,
     ) -> "OnPolicyAlgorithm":
         iteration = 0
-
+        self.logger.log("shyamal hw 1.3 AIPI530 - computing nstep returns & advantage")
         total_timesteps, callback = self._setup_learn(
             total_timesteps, eval_env, callback, eval_freq, n_eval_episodes, eval_log_path, reset_num_timesteps, tb_log_name
         )
