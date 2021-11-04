@@ -366,7 +366,6 @@ class RolloutBuffer(BaseBuffer):
         :param dones: if the last step was a terminal step (one bool for each env).
 
         """
-        self.logger.record("shyamal - computing nstep returns & advantage")
         # Convert to numpy
         last_values = last_values.clone().cpu().numpy().flatten()
 
