@@ -1,5 +1,5 @@
 # This file is here just to define MlpPolicy/CnnPolicy
-# that work for NEWA2C
+# that work for A2C
 from stable_baselines3.common.policies import (
     ActorCriticCnnPolicy,
     ActorCriticPolicy,

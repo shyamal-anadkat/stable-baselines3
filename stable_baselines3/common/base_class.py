@@ -70,7 +70,7 @@ class BaseAlgorithm(ABC):
         By default, it will try to use a Cuda compatible device and fallback to cpu
         if it is not possible.
     :param support_multi_env: Whether the algorithm supports training
-        with multiple environments (as in NEWA2C)
+        with multiple environments (as in A2C)
     :param create_eval_env: Whether to create a second environment that will be
         used for evaluating the agent periodically. (Only available when passing string for the environment)
     :param monitor_wrapper: When creating an environment, whether to wrap it

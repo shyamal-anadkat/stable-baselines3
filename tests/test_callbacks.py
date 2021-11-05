@@ -5,7 +5,7 @@ import gym
 import numpy as np
 import pytest
 
-from stable_baselines3 import NEWA2C, DDPG, DQN, PPO, SAC, TD3, HerReplayBuffer
+from stable_baselines3 import A2C, DDPG, DQN, PPO, SAC, TD3, HerReplayBuffer
 from stable_baselines3.common.callbacks import (
     CallbackList,
     CheckpointCallback,
@@ -19,7 +19,7 @@ from stable_baselines3.common.envs import BitFlippingEnv, IdentityEnv
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, PPO, SAC, TD3, DQN, DDPG])
+@pytest.mark.parametrize("model_class", [A2C, PPO, SAC, TD3, DQN, DDPG])
 def test_callbacks(tmp_path, model_class):
     log_folder = tmp_path / "logs/callbacks/"
 
@@ -72,7 +72,7 @@ def test_callbacks(tmp_path, model_class):
     model.learn(500, callback=lambda _locals, _globals: True)
 
     # Testing models that support multiple envs
-    if model_class in [NEWA2C, PPO]:
+    if model_class in [A2C, PPO]:
         max_episodes = 1
         n_envs = 2
         # Pendulum-v0 has a timelimit of 200 timesteps
@@ -107,7 +107,7 @@ def test_eval_callback_vec_env():
     n_eval_envs = 3
     train_env = IdentityEnv()
     eval_env = DummyVecEnv([lambda: IdentityEnv()] * n_eval_envs)
-    model = NEWA2C("MlpPolicy", train_env, seed=0)
+    model = A2C("MlpPolicy", train_env, seed=0)
 
     eval_callback = EvalCallback(
         eval_env,
@@ -176,7 +176,7 @@ def test_eval_friendly_error():
     eval_env = VecNormalize(eval_env, training=False, norm_reward=False)
     _ = train_env.reset()
     original_obs = train_env.get_original_obs()
-    model = NEWA2C("MlpPolicy", train_env, n_steps=50, seed=0)
+    model = A2C("MlpPolicy", train_env, n_steps=50, seed=0)
 
     eval_callback = EvalCallback(
         eval_env,

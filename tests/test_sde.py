@@ -2,7 +2,7 @@ import pytest
 import torch as th
 from torch.distributions import Normal
 
-from stable_baselines3 import NEWA2C, PPO, SAC
+from stable_baselines3 import A2C, PPO, SAC
 
 
 def test_state_dependent_exploration_grad():
@@ -59,7 +59,7 @@ def test_sde_check():
         PPO("MlpPolicy", "CartPole-v1", use_sde=True)
 
 
-@pytest.mark.parametrize("model_class", [SAC, NEWA2C, PPO])
+@pytest.mark.parametrize("model_class", [SAC, A2C, PPO])
 @pytest.mark.parametrize("use_expln", [False, True])
 def test_state_dependent_noise(model_class, use_expln):
     kwargs = {"learning_starts": 0} if model_class == SAC else {"n_steps": 64}

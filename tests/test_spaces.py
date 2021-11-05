@@ -2,7 +2,7 @@ import gym
 import numpy as np
 import pytest
 
-from stable_baselines3 import NEWA2C, DDPG, DQN, PPO, SAC, TD3
+from stable_baselines3 import A2C, DDPG, DQN, PPO, SAC, TD3
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 
@@ -52,14 +52,14 @@ def test_identity_spaces(model_class, env):
     evaluate_policy(model, env, n_eval_episodes=5, warn=False)
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, DDPG, DQN, PPO, SAC, TD3])
+@pytest.mark.parametrize("model_class", [A2C, DDPG, DQN, PPO, SAC, TD3])
 @pytest.mark.parametrize("env", ["Pendulum-v0", "CartPole-v1"])
 def test_action_spaces(model_class, env):
     if model_class in [SAC, DDPG, TD3]:
         supported_action_space = env == "Pendulum-v0"
     elif model_class == DQN:
         supported_action_space = env == "CartPole-v1"
-    elif model_class in [NEWA2C, PPO]:
+    elif model_class in [A2C, PPO]:
         supported_action_space = True
 
     if supported_action_space:
@@ -69,7 +69,7 @@ def test_action_spaces(model_class, env):
             model_class("MlpPolicy", env)
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, PPO])
+@pytest.mark.parametrize("model_class", [A2C, PPO])
 @pytest.mark.parametrize("env", ["Taxi-v3"])
 def test_discrete_obs_space(model_class, env):
     env = make_vec_env(env, n_envs=2, seed=0)

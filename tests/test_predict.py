@@ -3,14 +3,14 @@ import numpy as np
 import pytest
 import torch as th
 
-from stable_baselines3 import NEWA2C, DQN, PPO, SAC, TD3
+from stable_baselines3 import A2C, DQN, PPO, SAC, TD3
 from stable_baselines3.common.envs import IdentityEnv
 from stable_baselines3.common.utils import get_device
 from stable_baselines3.common.vec_env import DummyVecEnv
 
 MODEL_LIST = [
     PPO,
-    NEWA2C,
+    A2C,
     TD3,
     SAC,
     DQN,
@@ -101,7 +101,7 @@ def test_dqn_epsilon_greedy():
     assert env.action_space.contains(action)
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, SAC, PPO, TD3])
+@pytest.mark.parametrize("model_class", [A2C, SAC, PPO, TD3])
 def test_subclassed_space_env(model_class):
     env = CustomSubClassedSpaceEnv()
     model = model_class("MlpPolicy", env, policy_kwargs=dict(net_arch=[32]))

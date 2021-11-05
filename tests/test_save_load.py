@@ -10,14 +10,14 @@ import numpy as np
 import pytest
 import torch as th
 
-from stable_baselines3 import NEWA2C, DDPG, DQN, PPO, SAC, TD3
+from stable_baselines3 import A2C, DDPG, DQN, PPO, SAC, TD3
 from stable_baselines3.common.base_class import BaseAlgorithm
 from stable_baselines3.common.envs import FakeImageEnv, IdentityEnv, IdentityEnvBox
 from stable_baselines3.common.save_util import load_from_pkl, open_path, save_to_pkl
 from stable_baselines3.common.utils import get_device
 from stable_baselines3.common.vec_env import DummyVecEnv
 
-MODEL_LIST = [PPO, NEWA2C, TD3, SAC, DQN, DDPG]
+MODEL_LIST = [PPO, A2C, TD3, SAC, DQN, DDPG]
 
 
 def select_env(model_class: BaseAlgorithm) -> gym.Env:
@@ -178,7 +178,7 @@ def test_set_env(tmp_path, model_class):
     kwargs = {}
     if model_class in {DQN, DDPG, SAC, TD3}:
         kwargs = dict(learning_starts=50, train_freq=4)
-    elif model_class in {NEWA2C, PPO}:
+    elif model_class in {A2C, PPO}:
         kwargs = dict(n_steps=64)
 
     # create model
@@ -305,7 +305,7 @@ def test_save_load_pytorch_var(tmp_path):
     assert th.allclose(ent_coef_before, ent_coef_after)
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, TD3])
+@pytest.mark.parametrize("model_class", [A2C, TD3])
 def test_save_load_env_cnn(tmp_path, model_class):
     """
     Test loading with an env that requires a ``CnnPolicy``.
@@ -408,8 +408,8 @@ def test_save_load_policy(tmp_path, model_class, policy_str, use_sde):
     """
     kwargs = dict(policy_kwargs=dict(net_arch=[16]))
 
-    # gSDE is only applicable for NEWA2C, PPO and SAC
-    if use_sde and model_class not in [NEWA2C, PPO, SAC]:
+    # gSDE is only applicable for A2C, PPO and SAC
+    if use_sde and model_class not in [A2C, PPO, SAC]:
         pytest.skip()
 
     if policy_str == "MlpPolicy":

@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import torch as th
 
-from stable_baselines3 import NEWA2C, PPO
+from stable_baselines3 import A2C, PPO
 from stable_baselines3.common.distributions import (
     BernoulliDistribution,
     CategoricalDistribution,
@@ -38,7 +38,7 @@ def test_bijector():
     assert th.isclose(TanhBijector.inverse(squashed_actions), actions).all()
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, PPO])
+@pytest.mark.parametrize("model_class", [A2C, PPO])
 def test_squashed_gaussian(model_class):
     """
     Test run with squashed Gaussian (notably entropy computation)
@@ -55,13 +55,13 @@ def test_squashed_gaussian(model_class):
 
 
 @pytest.fixture()
-def dummy_model_distribution_obs_and_actions() -> Tuple[NEWA2C, np.array, np.array]:
+def dummy_model_distribution_obs_and_actions() -> Tuple[A2C, np.array, np.array]:
     """
-    Fixture creating a Pendulum-v0 gym env, an NEWA2C model and sampling 10 random observations and actions from the env
-    :return: NEWA2C model, random observations, random actions
+    Fixture creating a Pendulum-v0 gym env, an A2C model and sampling 10 random observations and actions from the env
+    :return: A2C model, random observations, random actions
     """
     env = gym.make("Pendulum-v0")
-    model = NEWA2C("MlpPolicy", env, seed=23)
+    model = A2C("MlpPolicy", env, seed=23)
     random_obs = np.array([env.observation_space.sample() for _ in range(10)])
     random_actions = np.array([env.action_space.sample() for _ in range(10)])
     return model, random_obs, random_actions

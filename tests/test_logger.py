@@ -7,7 +7,7 @@ import torch as th
 from matplotlib import pyplot as plt
 from pandas.errors import EmptyDataError
 
-from stable_baselines3 import NEWA2C
+from stable_baselines3 import A2C
 from stable_baselines3.common.logger import (
     DEBUG,
     INFO,
@@ -98,24 +98,24 @@ def test_set_logger(tmp_path):
     # set up logger
     new_logger = configure(str(tmp_path), ["stdout", "csv", "tensorboard"])
     # Default outputs with verbose=0
-    model = NEWA2C("MlpPolicy", "CartPole-v1", verbose=0).learn(4)
+    model = A2C("MlpPolicy", "CartPole-v1", verbose=0).learn(4)
     assert model.logger.output_formats == []
 
-    model = NEWA2C("MlpPolicy", "CartPole-v1", verbose=0, tensorboard_log=str(tmp_path)).learn(4)
+    model = A2C("MlpPolicy", "CartPole-v1", verbose=0, tensorboard_log=str(tmp_path)).learn(4)
     assert str(tmp_path) in model.logger.dir
     assert isinstance(model.logger.output_formats[0], TensorBoardOutputFormat)
 
     # Check that env variable work
     new_tmp_path = str(tmp_path / "new_tmp")
     os.environ["SB3_LOGDIR"] = new_tmp_path
-    model = NEWA2C("MlpPolicy", "CartPole-v1", verbose=0).learn(4)
+    model = A2C("MlpPolicy", "CartPole-v1", verbose=0).learn(4)
     assert model.logger.dir == new_tmp_path
 
     # Default outputs with verbose=1
-    model = NEWA2C("MlpPolicy", "CartPole-v1", verbose=1).learn(4)
+    model = A2C("MlpPolicy", "CartPole-v1", verbose=1).learn(4)
     assert isinstance(model.logger.output_formats[0], HumanOutputFormat)
     # with tensorboard
-    model = NEWA2C("MlpPolicy", "CartPole-v1", verbose=1, tensorboard_log=str(tmp_path)).learn(4)
+    model = A2C("MlpPolicy", "CartPole-v1", verbose=1, tensorboard_log=str(tmp_path)).learn(4)
     assert isinstance(model.logger.output_formats[0], HumanOutputFormat)
     assert isinstance(model.logger.output_formats[1], TensorBoardOutputFormat)
     assert len(model.logger.output_formats) == 2
@@ -129,7 +129,7 @@ def test_set_logger(tmp_path):
     assert len(model.logger.output_formats) == 3
     model.learn(32)
 
-    model = NEWA2C("MlpPolicy", "CartPole-v1", verbose=1)
+    model = A2C("MlpPolicy", "CartPole-v1", verbose=1)
     model.set_logger(new_logger)
     model.learn(32)
     # Check that the new logger is not overwritten

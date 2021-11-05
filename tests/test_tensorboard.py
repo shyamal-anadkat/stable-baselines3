@@ -2,10 +2,10 @@ import os
 
 import pytest
 
-from stable_baselines3 import NEWA2C, PPO, SAC, TD3
+from stable_baselines3 import A2C, PPO, SAC, TD3
 
 MODEL_DICT = {
-    "NEWA2C": (NEWA2C, "CartPole-v1"),
+    "a2c": (A2C, "CartPole-v1"),
     "ppo": (PPO, "CartPole-v1"),
     "sac": (SAC, "Pendulum-v0"),
     "td3": (TD3, "Pendulum-v0"),

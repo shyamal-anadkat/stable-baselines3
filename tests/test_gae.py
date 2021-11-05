@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 import torch as th
 
-from stable_baselines3 import NEWA2C, PPO
+from stable_baselines3 import A2C, PPO
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.policies import ActorCriticPolicy
 
@@ -92,7 +92,7 @@ class CustomPolicy(ActorCriticPolicy):
         return actions, values, log_prob
 
 
-@pytest.mark.parametrize("model_class", [NEWA2C, PPO])
+@pytest.mark.parametrize("model_class", [A2C, PPO])
 @pytest.mark.parametrize("gae_lambda", [1.0, 0.9])
 @pytest.mark.parametrize("gamma", [1.0, 0.99])
 @pytest.mark.parametrize("num_episodes", [1, 3])

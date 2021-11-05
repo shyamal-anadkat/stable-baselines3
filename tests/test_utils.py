@@ -7,7 +7,7 @@ import pytest
 import torch as th
 
 import stable_baselines3 as sb3
-from stable_baselines3 import NEWA2C, PPO
+from stable_baselines3 import A2C, PPO
 from stable_baselines3.common.atari_wrappers import ClipRewardEnv, MaxAndSkipEnv
 from stable_baselines3.common.env_util import is_wrapped, make_atari_env, make_vec_env, unwrap_wrapper
 from stable_baselines3.common.evaluation import evaluate_policy
@@ -97,14 +97,14 @@ def test_vec_env_monitor_kwargs():
 
 def test_env_auto_monitor_wrap():
     env = gym.make("Pendulum-v0")
-    model = NEWA2C("MlpPolicy", env)
+    model = A2C("MlpPolicy", env)
     assert model.env.env_is_wrapped(Monitor)[0] is True
 
     env = Monitor(env)
-    model = NEWA2C("MlpPolicy", env)
+    model = A2C("MlpPolicy", env)
     assert model.env.env_is_wrapped(Monitor)[0] is True
 
-    model = NEWA2C("MlpPolicy", "Pendulum-v0")
+    model = A2C("MlpPolicy", "Pendulum-v0")
     assert model.env.env_is_wrapped(Monitor)[0] is True
 
 
@@ -136,7 +136,7 @@ def test_custom_vec_env(tmp_path):
 
 
 def test_evaluate_policy():
-    model = NEWA2C("MlpPolicy", "Pendulum-v0", seed=0)
+    model = A2C("MlpPolicy", "Pendulum-v0", seed=0)
     n_steps_per_episode, n_eval_episodes = 200, 2
     model.n_callback_calls = 0
 
@@ -204,7 +204,7 @@ def test_evaluate_vector_env(n_envs):
     n_eval_episodes = 6
 
     env = make_vec_env("CartPole-v1", n_envs)
-    model = NEWA2C("MlpPolicy", "CartPole-v1", seed=0)
+    model = A2C("MlpPolicy", "CartPole-v1", seed=0)
 
     class CountCallback:
         def __init__(self):
@@ -230,7 +230,7 @@ def test_evaluate_policy_monitors(vec_env_class):
     n_eval_episodes = 3
     n_envs = 2
     env_id = "CartPole-v0"
-    model = NEWA2C("MlpPolicy", env_id, seed=0)
+    model = A2C("MlpPolicy", env_id, seed=0)
 
     def make_eval_env(with_monitor, wrapper_class=gym.Wrapper):
         # Make eval environment with or without monitor in root,

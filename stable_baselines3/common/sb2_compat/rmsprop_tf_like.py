@@ -8,7 +8,7 @@ class RMSpropTFLike(Optimizer):
     r"""Implements RMSprop algorithm with closer match to Tensorflow version.
 
     For reproducibility with original stable-baselines. Use this
-    version with e.g. NEWA2C for stabler learning than with the PyTorch
+    version with e.g. A2C for stabler learning than with the PyTorch
     RMSProp. Based on the PyTorch v1.5.0 implementation of RMSprop.
 
     See a more throughout conversion in pytorch-image-models repository:
