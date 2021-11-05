@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 from gym import spaces
 
-from stable_baselines3 import A2C, DDPG, DQN, PPO, SAC, TD3
+from stable_baselines3 import NEWA2C, DDPG, DQN, PPO, SAC, TD3
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.envs import BitFlippingEnv, SimpleMultiObsEnv
 from stable_baselines3.common.evaluation import evaluate_policy
@@ -86,15 +86,15 @@ def test_policy_hint(policy):
         PPO(policy, BitFlippingEnv(n_bits=4))
 
 
-@pytest.mark.parametrize("model_class", [PPO, A2C])
+@pytest.mark.parametrize("model_class", [PPO, NEWA2C])
 def test_goal_env(model_class):
     env = BitFlippingEnv(n_bits=4)
-    # check that goal env works for PPO/A2C that cannot use HER replay buffer
+    # check that goal env works for PPO/NEWA2C that cannot use HER replay buffer
     model = model_class("MultiInputPolicy", env, n_steps=64).learn(250)
     evaluate_policy(model, model.get_env())
 
 
-@pytest.mark.parametrize("model_class", [PPO, A2C, DQN, DDPG, SAC, TD3])
+@pytest.mark.parametrize("model_class", [PPO, NEWA2C, DQN, DDPG, SAC, TD3])
 def test_consistency(model_class):
     """
     Make sure that dict obs with vector only vs using flatten obs is equivalent.
@@ -110,7 +110,7 @@ def test_consistency(model_class):
     kwargs = {}
     n_steps = 256
 
-    if model_class in {A2C, PPO}:
+    if model_class in {NEWA2C, PPO}:
         kwargs = dict(
             n_steps=128,
         )
@@ -140,11 +140,11 @@ def test_consistency(model_class):
     assert np.allclose(action_1, action_2)
 
 
-@pytest.mark.parametrize("model_class", [PPO, A2C, DQN, DDPG, SAC, TD3])
+@pytest.mark.parametrize("model_class", [PPO, NEWA2C, DQN, DDPG, SAC, TD3])
 @pytest.mark.parametrize("channel_last", [False, True])
 def test_dict_spaces(model_class, channel_last):
     """
-    Additional tests for PPO/A2C/SAC/DDPG/TD3/DQN to check observation space support
+    Additional tests for PPO/NEWA2C/SAC/DDPG/TD3/DQN to check observation space support
     with mixed observation.
     """
     use_discrete_actions = model_class not in [SAC, TD3, DDPG]
@@ -154,7 +154,7 @@ def test_dict_spaces(model_class, channel_last):
     kwargs = {}
     n_steps = 256
 
-    if model_class in {A2C, PPO}:
+    if model_class in {NEWA2C, PPO}:
         kwargs = dict(
             n_steps=128,
             policy_kwargs=dict(

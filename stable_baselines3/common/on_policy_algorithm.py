@@ -16,7 +16,7 @@ from stable_baselines3.common.vec_env import VecEnv
 
 class OnPolicyAlgorithm(BaseAlgorithm):
     """
-    The base for On-Policy algorithms (ex: A2C/PPO).
+    The base for On-Policy algorithms (ex: NEWA2C/PPO).
 
     :param policy: The policy model to use (MlpPolicy, CnnPolicy, ...)
     :param env: The environment to learn from (if registered in Gym, can be str)

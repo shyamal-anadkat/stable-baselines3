@@ -293,7 +293,7 @@ class ReplayBuffer(BaseBuffer):
 
 class RolloutBuffer(BaseBuffer):
     """
-    Rollout buffer used in on-policy algorithms like A2C/PPO.
+    Rollout buffer used in on-policy algorithms like NEWA2C/PPO.
     It corresponds to ``buffer_size`` transitions collected
     using the current policy.
     This experience will be discarded after the policy update.

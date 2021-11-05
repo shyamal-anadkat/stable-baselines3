@@ -521,7 +521,7 @@ class StopTrainingOnMaxEpisodes(BaseCallback):
     def _on_step(self) -> bool:
         # Checking for both 'done' and 'dones' keywords because:
         # Some models use keyword 'done' (e.g.,: SAC, TD3, DQN, DDPG)
-        # While some models use keyword 'dones' (e.g.,: A2C, PPO)
+        # While some models use keyword 'dones' (e.g.,: NEWA2C, PPO)
         done_array = np.array(self.locals.get("done") if self.locals.get("done") is not None else self.locals.get("dones"))
         self.n_episodes += np.sum(done_array).item()
 

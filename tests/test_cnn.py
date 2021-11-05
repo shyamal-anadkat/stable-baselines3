@@ -6,21 +6,21 @@ import pytest
 import torch as th
 from gym import spaces
 
-from stable_baselines3 import A2C, DQN, PPO, SAC, TD3
+from stable_baselines3 import NEWA2C, DQN, PPO, SAC, TD3
 from stable_baselines3.common.envs import FakeImageEnv
 from stable_baselines3.common.preprocessing import is_image_space, is_image_space_channels_first
 from stable_baselines3.common.utils import zip_strict
 from stable_baselines3.common.vec_env import VecTransposeImage, is_vecenv_wrapped
 
 
-@pytest.mark.parametrize("model_class", [A2C, PPO, SAC, TD3, DQN])
+@pytest.mark.parametrize("model_class", [NEWA2C, PPO, SAC, TD3, DQN])
 def test_cnn(tmp_path, model_class):
     SAVE_NAME = "cnn_model.zip"
     # Fake grayscale with frameskip
     # Atari after preprocessing: 84x84x1, here we are using lower resolution
     # to check that the network handle it automatically
     env = FakeImageEnv(screen_height=40, screen_width=40, n_channels=1, discrete=model_class not in {SAC, TD3})
-    if model_class in {A2C, PPO}:
+    if model_class in {NEWA2C, PPO}:
         kwargs = dict(n_steps=64)
     else:
         # Avoid memory error when using replay buffer
@@ -207,7 +207,7 @@ def test_channel_first_env(tmp_path):
     # it will raise an error of negative dimension sizes while creating convolutions
     env = FakeImageEnv(screen_height=40, screen_width=40, n_channels=1, discrete=True, channel_first=True)
 
-    model = A2C("CnnPolicy", env, n_steps=100).learn(250)
+    model = NEWA2C("CnnPolicy", env, n_steps=100).learn(250)
 
     assert not is_vecenv_wrapped(model.get_env(), VecTransposeImage)
 
@@ -218,7 +218,7 @@ def test_channel_first_env(tmp_path):
     model.save(tmp_path / SAVE_NAME)
     del model
 
-    model = A2C.load(tmp_path / SAVE_NAME)
+    model = NEWA2C.load(tmp_path / SAVE_NAME)
 
     # Check that the prediction is the same
     assert np.allclose(action, model.predict(obs, deterministic=True)[0])

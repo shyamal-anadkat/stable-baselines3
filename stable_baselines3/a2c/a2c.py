@@ -10,15 +10,15 @@ from stable_baselines3.common.type_aliases import GymEnv, MaybeCallback, Schedul
 from stable_baselines3.common.utils import explained_variance
 
 
-class A2C(OnPolicyAlgorithm):
+class NEWA2C(OnPolicyAlgorithm):
     """
-    Advantage Actor Critic (A2C)
+    Advantage Actor Critic (NEWA2C)
 
     Paper: https://arxiv.org/abs/1602.01783
-    Code: This implementation borrows code from https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail and
+    Code: This implementation borrows code from https://github.com/ikostrikov/pytorch-NEWA2C-ppo-acktr-gail and
     and Stable Baselines (https://github.com/hill-a/stable-baselines)
 
-    Introduction to A2C: https://hackernoon.com/intuitive-rl-intro-to-advantage-actor-critic-a2c-4ff545978752
+    Introduction to NEWA2C: https://hackernoon.com/intuitive-rl-intro-to-advantage-actor-critic-NEWA2C-4ff545978752
 
     :param policy: The policy model to use (MlpPolicy, CnnPolicy, ...)
     :param env: The environment to learn from (if registered in Gym, can be str)
@@ -76,7 +76,7 @@ class A2C(OnPolicyAlgorithm):
         _init_setup_model: bool = True,
     ):
 
-        super(A2C, self).__init__(
+        super(NEWA2C, self).__init__(
             policy,
             env,
             learning_rate=learning_rate,
@@ -184,12 +184,12 @@ class A2C(OnPolicyAlgorithm):
         eval_env: Optional[GymEnv] = None,
         eval_freq: int = -1,
         n_eval_episodes: int = 5,
-        tb_log_name: str = "A2C",
+        tb_log_name: str = "NEWA2C",
         eval_log_path: Optional[str] = None,
         reset_num_timesteps: bool = True,
-    ) -> "A2C":
+    ) -> "NEWA2C":
 
-        return super(A2C, self).learn(
+        return super(NEWA2C, self).learn(
             total_timesteps=total_timesteps,
             callback=callback,
             log_interval=log_interval,

@@ -1,13 +1,13 @@
 import pytest
 
-from stable_baselines3 import A2C, DQN, PPO, SAC, TD3
+from stable_baselines3 import NEWA2C, DQN, PPO, SAC, TD3
 from stable_baselines3.common.noise import NormalActionNoise
 
 N_STEPS_TRAINING = 3000
 SEED = 0
 
 
-@pytest.mark.parametrize("algo", [A2C, DQN, PPO, SAC, TD3])
+@pytest.mark.parametrize("algo", [NEWA2C, DQN, PPO, SAC, TD3])
 def test_deterministic_training_common(algo):
     results = [[], []]
     rewards = [[], []]
