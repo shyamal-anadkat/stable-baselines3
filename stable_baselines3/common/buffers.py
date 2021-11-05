@@ -321,12 +321,14 @@ class RolloutBuffer(BaseBuffer):
         action_space: spaces.Space,
         device: Union[th.device, str] = "cpu",
         gae_lambda: float = 1,
+        use_n_step_advantage: bool = False,
         gamma: float = 0.99,
         n_envs: int = 1,
     ):
 
         super(RolloutBuffer, self).__init__(buffer_size, observation_space, action_space, device, n_envs=n_envs)
         self.gae_lambda = gae_lambda
+        self.use_n_step_advantage = use_n_step_advantage
         self.gamma = gamma
         self.observations, self.actions, self.rewards, self.advantages = None, None, None, None
         self.returns, self.episode_starts, self.values, self.log_probs = None, None, None, None
@@ -368,6 +370,7 @@ class RolloutBuffer(BaseBuffer):
         """
         # Convert to numpy
         last_values = last_values.clone().cpu().numpy().flatten()
+        use_n_step_advantage = self.use_n_step_advantage
 
         last_gae_lam = 0
         for step in reversed(range(self.buffer_size)):
@@ -377,8 +380,14 @@ class RolloutBuffer(BaseBuffer):
             else:
                 next_non_terminal = 1.0 - self.episode_starts[step + 1]
                 next_values = self.values[step + 1]
-            R = self.rewards[step] + self.gamma * next_values * next_non_terminal
-            self.advantages[step] = R - self.values[step]
+
+            if use_n_step_advantage:
+                R = self.rewards[step] + self.gamma * next_values * next_non_terminal
+                self.advantages[step] = R - self.values[step]
+            else:
+                delta = self.rewards[step] + self.gamma * next_values * next_non_terminal - self.values[step]
+                last_gae_lam = delta + self.gamma * self.gae_lambda * next_non_terminal * last_gae_lam
+                self.advantages[step] = last_gae_lam
         # TD(lambda) estimator, see Github PR #375 or "Telescoping in TD(lambda)"
         # in David Silver Lecture 4: https://www.youtube.com/watch?v=PnHCvfgC_ZA
         self.returns = self.advantages + self.values
@@ -634,6 +643,7 @@ class DictRolloutBuffer(RolloutBuffer):
         action_space: spaces.Space,
         device: Union[th.device, str] = "cpu",
         gae_lambda: float = 1,
+        use_n_step_advantage: bool = False,
         gamma: float = 0.99,
         n_envs: int = 1,
     ):
@@ -643,6 +653,7 @@ class DictRolloutBuffer(RolloutBuffer):
         assert isinstance(self.obs_shape, dict), "DictRolloutBuffer must be used with Dict obs space only"
 
         self.gae_lambda = gae_lambda
+        self.use_n_step_advantage = use_n_step_advantage
         self.gamma = gamma
         self.observations, self.actions, self.rewards, self.advantages = None, None, None, None
         self.returns, self.episode_starts, self.values, self.log_probs = None, None, None, None
