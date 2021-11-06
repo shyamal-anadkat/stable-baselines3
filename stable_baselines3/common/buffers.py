@@ -373,6 +373,7 @@ class RolloutBuffer(BaseBuffer):
         use_n_step_advantage = self.use_n_step_advantage
 
         last_gae_lam = 0
+        R = last_values
         for step in reversed(range(self.buffer_size)):
             if step == self.buffer_size - 1:
                 next_non_terminal = 1.0 - dones
@@ -382,7 +383,7 @@ class RolloutBuffer(BaseBuffer):
                 next_values = self.values[step + 1]
 
             if use_n_step_advantage:
-                R = self.rewards[step] + self.gamma * next_values * next_non_terminal
+                R = self.rewards[step] + self.gamma * R * next_non_terminal
                 self.advantages[step] = R - self.values[step]
             else:
                 delta = self.rewards[step] + self.gamma * next_values * next_non_terminal - self.values[step]
